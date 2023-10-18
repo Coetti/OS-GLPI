@@ -1,15 +1,10 @@
-const https = require('https');
+import { endpoint } from "./endpoints-glpi.js";
+import https from 'https';
 
-var itemsType = "Computer";
-var ip = "localhost";
-var initSessionURL = "https://" + ip + "/glpi/apirest.php/initSession";
-var killSessionURL = "https://" + ip + "/glpi/apirest.php/killSession";
-var getEntitiesURL = "https://"+ ip +"/glpi/apirest.php/getMyEntities/?is_recursive=true";
-var getItemsURL = "https://"+ ip +"/glpi/apirest.php/" + itemsType;
 
 var sessionToken;
 
-
+var itemsType = "Computer";
 
 // Headers for init session 
 const initHeaders = {
@@ -116,70 +111,40 @@ const initHeaders = {
     }
   
     function getItems(url, method, headers) {
-        const options = {
-          method: method,
-          headers: headers,
-          rejectUnauthorized: false
-        };
-      
-        const req = https.request(url, options, (res) => {
-          let data = '';
-      
-          // A chunk of data has been received.
-          res.on('data', (chunk) => {
-            data += chunk;
-          });
-      
-          // The whole response has been received.
-          res.on('end', () => {
-            try {
-              const parsedData = JSON.parse(data);
-              const mappedData = parsedData.map(item => {
-                // Verificando se o campo 'comment' não é nulo ou vazio
-                if (item.comment && item.comment.trim() !== '') {
-                  const commentParts = item.comment.split('\n');
-                  const voltagem = commentParts.find(part => part.includes('Voltagem:'));
-                  const senha = commentParts.find(part => part.includes('Senha:'));
-              
-                  return {
-                    id: item.id,
-                    name: item.name,
-                    serial: item.serial,
-                    voltagem: voltagem ? voltagem.split(': ')[1] : null,
-                    senha: senha ? senha.split(': ')[1] : null,
-                    date_mod: item.date_mod
-                  };
-                } else {
-                  return {
-                    id: item.id,
-                    name: item.name,
-                    serial: item.serial,
-                    voltagem: null,
-                    senha: null,
-                    date_mod: item.date_mod
-                  };
-                }
-              });              
-              console.log(mappedData);
-            } catch (error) {
-              console.error(`Error parsing JSON: ${error.message}`);
-            }
-          });
+      const options = {
+        method: method,
+        headers: headers,
+        rejectUnauthorized: false
+      };
+    
+      const req = https.request(url, options, (res) => {
+        let data = '';
+    
+        // A chunk of data has been received.
+        res.on('data', (chunk) => {
+          data += chunk;
         });
-      
-        // Handle errors
-        req.on('error', (e) => {
-          console.error(`Error: ${e.message}`);
+    
+        // The whole response has been received.
+        res.on('end', () => {
+          console.log(JSON.parse(data));
         });
-      
-        // End the request
-        req.end();
-      }
+      });
+    
+      // Handle errors
+      req.on('error', (e) => {
+        console.error(`Error: ${e.message}`);
+      });
+  
+      // End the request
+      req.end(); 
+    }
+  
   
     async function main() {
     try {
       // Initialize session
-      sessionToken = await initSession(initSessionURL, 'GET', initHeaders);
+      sessionToken = await initSession(endpoint.initSession, 'GET', initHeaders);
   
       // Define headers with session token
       const headers = {
@@ -189,8 +154,8 @@ const initHeaders = {
       };
   
       // GET all items
-      await getEntities(getEntitiesURL, 'GET', headers);
-      await getItems(getItemsURL, 'GET', headers);
+      await getEntities(endpoint.getEntitiesURL, 'GET', headers);
+      await getItems(endpoint.getItemsURL, 'GET', headers);
       //await killSession(killSessionURL, 'GET', headers);
       // Kill the session (if needed)
       // await killSession(killSessionURL, 'GET', headers);
