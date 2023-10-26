@@ -2,10 +2,7 @@ const https = require('https');
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
-
-const agent = new https.Agent({
-  rejectUnauthorized: false
-});
+const cors = require('cors');
 
 
 const ip = "localhost";
@@ -14,24 +11,25 @@ const initSessionURL = `https://${ip}${initSessionPath}`;
 const getEntitiesPath = "/glpi/apirest.php/getMyEntities/?is_recursive=true";
 const getEntitiesURL = `https://${ip}${getEntitiesPath}`;
 
+const contentType = 'application/json';
+const auth = 'user_token cKbvdbpK11lFG2Hgj6THf9ohUPP2dFjd1t074XfH'
+const appToken = '8r40UKACsvbA2dtGkEcz4s3ePkkHGs0ayfFSvbJa'
+var sessionToken = null;
 
 
+const agent = new https.Agent({
+  rejectUnauthorized: false
+});
 
 const app = express();
 
-const privateKey = fs.readFileSync('certificate.key', 'utf-8');
-const certificate = fs.readFileSync('certificate.crt', 'utf-8');
-const credentials = {
-  key: privateKey,
-  cert: certificate
-}
-var sessionToken = null;
+app.use(cors());
 
-app.get('/teste', async (req, res) => {
+app.get('/initSession', async (req, res) => {
 
   const initHeaders = {
-    'Content-Type': 'application/json',
-    'Authorization': 'user_token cKbvdbpK11lFG2Hgj6THf9ohUPP2dFjd1t074XfH',
+    'Content-Type': contentType,
+    'Authorization': auth,
     'App-Token': '8r40UKACsvbA2dtGkEcz4s3ePkkHGs0ayfFSvbJa'
   };
 
@@ -56,21 +54,21 @@ app.get('/teste', async (req, res) => {
   }
 });
 
+var headers = {
+  'Content-Type': 'application/json',
+  'Session-Token': sessionToken,
+  'App-Token': '8r40UKACsvbA2dtGkEcz4s3ePkkHGs0ayfFSvbJa'
+};
+
 app.get("/clientes", async (req,res) =>{
 
-  const headers = {
-    'Content-Type': 'application/json',
-    'Session-Token': sessionToken,
-    'App-Token': '8r40UKACsvbA2dtGkEcz4s3ePkkHGs0ayfFSvbJa'
-  };
+console.log(headers)
 
-  console.log(headers)
-
-  const options = {
+const options = {
     method: 'GET',
     headers: headers,
     httpsAgent: agent
-  };
+};
 
   try{
     const response = await axios.request({
@@ -78,12 +76,7 @@ app.get("/clientes", async (req,res) =>{
       ...options
     });
 
-    /*const clientes = response.data
-
-    console.log(clientes);
-    res.send(response.data)  */
-
-        const clientes = response.data.myentities;
+    const clientes = response.data.myentities;
 
     // Extrair as substrings após "&#62;" das strings de "name"
     const extractedNames = clientes.map((cliente) => {
@@ -105,5 +98,5 @@ app.get("/clientes", async (req,res) =>{
 });
 
 app.listen(8081, function(){
-  console.log("node api conectada")
+  console.log("Node API conectada com sucesso!!")
 });

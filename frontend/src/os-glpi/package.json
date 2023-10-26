@@ -1,5 +1,5 @@
 {
-  "name": "glpi-app",
+  "name": "os-glpi",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
