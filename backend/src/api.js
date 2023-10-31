@@ -75,7 +75,7 @@ app.get("/clientes", async (req, res) => {
       url: getEntitiesURL,
       ...options
     });
-
+/*
     const clientes = response.data.myentities;
 
     // Extrair as substrings após "&#62;" das strings de "name"
@@ -86,12 +86,14 @@ app.get("/clientes", async (req, res) => {
       } else {
         return cliente.name;
       }
-    });
+    }); */
 
-    console.log(extractedNames);
+    const responseBody = response.data; // Obter apenas o corpo da resposta
     console.log("killing the session...")
+    console.log(responseBody)
     killSession();
-    res.send(extractedNames);
+    res.json(responseBody); // Enviar o corpo da resposta como JSON
+
   } catch (error) {
     console.log("killing the session...")
     killSession();

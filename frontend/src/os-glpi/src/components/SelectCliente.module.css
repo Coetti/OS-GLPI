@@ -1,0 +1,25 @@
+.select{
+    display:grid;
+    text-transform: uppercase;  
+    background-color: #dcdcdc;
+    border: 5px;
+    border-radius: 7px;
+    border-style:ridge;
+    font-size: medium;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    text-align: center;
+    width: 200px;
+}
+
+.option{
+    display:flex;
+    text-transform: uppercase;
+    background-color: #dcdcdc;
+    border: 5px;
+    border-radius: 7px;
+    border-style: ridge;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: medium;
+    font-weight: bold;
+}
