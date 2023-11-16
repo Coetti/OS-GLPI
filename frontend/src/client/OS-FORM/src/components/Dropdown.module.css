@@ -1,0 +1,27 @@
+/* Estilos para o botão de seleção (azul) */
+.dropdownbutton {
+  background-color: #191970;
+  max-width: fit-content;
+  color: white;
+  padding: 4px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Estilos para as opções da lista (cinza claro) */
+/* Estilos para as opções do dropdown (inicialmente ocultas) */
+.dropdown-content {
+  display: none; /* Inicialmente ocultas */
+  position: absolute;
+  background-color: #f9f9f9;
+  max-width: fit-content;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border: 1px solid #191970;
+}
+
+/* Mostrar as opções do dropdown quando o mouse passa sobre o elemento pai (dropdown) */
+.dropdown:hover .dropdown-content {
+  display: block; /* Exibidas ao passar o mouse sobre o elemento pai */
+}
