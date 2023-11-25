@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
+import ExibeCliente from "./ExibeCliente";
 
-function SearchClientes({ data }) {
+function SearchClientes({ data, responseData }) {
   const [query, setQuery] = useState("");
   const [selectedResult, setSelectedResult] = useState("");
   const [results, setResults] = useState([]);
@@ -45,6 +46,7 @@ function SearchClientes({ data }) {
         onFocus={() => setShowResults(true)}
         //onBlur={() => setShowResults(false)} causa problema na seleção
       />
+
       {showResults && results.length > 0 && (
         <ul className="result-list">
           {results.map((result, index) => (
@@ -58,6 +60,7 @@ function SearchClientes({ data }) {
           ))}
         </ul>
       )}
+      {selectedResult !== "" && <ExibeCliente data={responseData} />}
     </div>
   );
 }

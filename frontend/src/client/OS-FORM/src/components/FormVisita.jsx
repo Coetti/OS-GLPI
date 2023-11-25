@@ -1,5 +1,6 @@
 import SearchClientes from "./SearchClientes";
 import FormCliente from "./FormCliente";
+import Problem from "./Problem";
 import { useState } from "react";
 
 const FormVisita = () => {
@@ -19,6 +20,7 @@ const FormVisita = () => {
       <SearchClientes data={clientesArray} />
       <button onClick={handleCadastrarClick}>+</button>
       {cadastrarCliente === true && <FormCliente />}
+      <Problem className="problem" />
     </div>
   );
 };

@@ -8,6 +8,7 @@ function DataFetcher({ children }) {
   const [itemPeripheral, setItemPeripheral] = useState([]);
   const [allItems, setAllItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [responseData, setResponseData] = useState(null);
 
   useEffect(() => {
     const fetchDataClientes = async () => {
@@ -23,6 +24,7 @@ function DataFetcher({ children }) {
             str.replace("Root entity &#62; ", "")
           );
           setClientesNome(nomes);
+          setResponseData(response);
         } else {
           console.log("myentities não é um array válido");
         }
@@ -118,7 +120,7 @@ function DataFetcher({ children }) {
   }, [itemComputer, itemPrinter, itemPeripheral]);
 
   // Return the child component (SearchClientes in this case) with the necessary data and methods
-  return children({ clientesNome, allItems, loading });
+  return children({ clientesNome, allItems, loading, responseData });
 }
 
 export default DataFetcher;
